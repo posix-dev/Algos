@@ -1,3 +1,5 @@
+package sprint1;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -10,11 +12,26 @@ import java.util.stream.Collectors;
 // Link: https://contest.yandex.ru/contest/22450/run-report/80120534/
 
 public final class NearestZero {
-    public static void main(@NotNull String[] args) {
-        int length = 5;
-        List<Integer> arr = List.of(new Integer[]{0, 1, 4, 9, 0});
-        List nearestArray = nearestToZeroArray(length, arr);
-        System.out.println(nearestArray);
+    public static void main(@NotNull String[] args) throws IOException {
+        List<Integer> arr;
+        List<Integer> nearestArray;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            int length = Integer.parseInt(reader.readLine().strip());
+            arr = Arrays.asList(reader.readLine().strip().split(" "))
+                    .stream()
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toList());
+
+            nearestArray = nearestToZeroArray(length, arr);
+        }
+
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        for (int i : nearestArray) {
+            writer.write(String.valueOf(i));
+            writer.write(" ");
+        }
+        writer.flush();
     }
 
     @NotNull
@@ -28,20 +45,19 @@ public final class NearestZero {
         return findNearestPoint(arr, zeroArrPositions);
     }
 
-    public static List<Integer> findNearestPoint(@NotNull List<Integer> arr, @NotNull List<Integer> zeroArrPositions) {
-        if (zeroArrPositions.size() == 1) {
-            return findDistanceFromOneEmptyHouse(arr, zeroArrPositions);
-        } else {
-            return findDistanceBetweenTwoEmptyHouses(arr, zeroArrPositions);
-        }
-    }
-
-    private static List<Integer> findDistanceBetweenTwoEmptyHouses(List<Integer> arr, List<Integer> zeroArrPositions) {
+    public static final List<Integer> findNearestPoint(List<Integer> arr, List<Integer> zeroArrPositions) {
         List<Integer> list = new ArrayList<>();
         int rightZeroPosition = 0;
         int leftIndex = Integer.MIN_VALUE;
         int rightIndex = zeroArrPositions.get(rightZeroPosition);
         int mid = (leftIndex + rightIndex) / 2;
+
+        if (zeroArrPositions.size() == 1) {
+            for (int i = 0; i < arr.size(); i++) {
+                list.add(i, Math.abs(i - rightIndex));
+            }
+            return list;
+        }
 
         for (int i = 0; i < arr.size(); i++) {
             int nearestIndex;
@@ -66,18 +82,6 @@ public final class NearestZero {
             }
 
             list.add(i, nearestIndex);
-        }
-
-        return list;
-    }
-
-    private static List<Integer> findDistanceFromOneEmptyHouse(List<Integer> arr, List<Integer> zeroArrPositions) {
-        List<Integer> list = new ArrayList<>();
-        int rightZeroPosition = 0;
-        int rightIndex = zeroArrPositions.get(rightZeroPosition);
-
-        for (int i = 0; i < arr.size(); i++) {
-            list.add(i, Math.abs(i - rightIndex));
         }
 
         return list;

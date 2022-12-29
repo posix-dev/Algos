@@ -1,3 +1,5 @@
+package sprint1;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,11 +13,15 @@ public final class HandsAgility {
     private static final Integer ROUNDS = 9;
 
     public static void main(String[] args) throws IOException {
-        int k = 4;
-        StringBuilder builder = new StringBuilder("1111" +
-                "1111" +
-                "1111" +
-                "1111");
+        int k;
+        StringBuilder builder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            k = Integer.parseInt(reader.readLine().strip());
+            builder.append(reader.readLine().strip());
+            builder.append(reader.readLine().strip());
+            builder.append(reader.readLine().strip());
+            builder.append(reader.readLine().strip());
+        }
         char[] charArray = builder.toString().toCharArray();
         HashMap<Character, Integer> mapWithRepeatNumbers = getMapWithRepeatNumbers(charArray);
 
