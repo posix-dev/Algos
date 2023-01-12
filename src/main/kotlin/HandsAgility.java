@@ -1,51 +1,55 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
+import java.util.*;
 
 // Id = 80108166
 // Link: https://contest.yandex.ru/contest/22450/run-report/80108166/
 
 public final class HandsAgility {
     private static final Integer PLAYERS = 2;
-    private static final Integer ROUNDS = 9;
 
-    public static void main(String[] args) throws IOException {
-        int k = 4;
-        StringBuilder builder = new StringBuilder("1111" +
-                "1111" +
-                "1111" +
-                "1111");
-        char[] charArray = builder.toString().toCharArray();
-        HashMap<Character, Integer> mapWithRepeatNumbers = getMapWithRepeatNumbers(charArray);
+    public static void main(String[] args) {
+        int k = 1;
+        String builder = "1999" +
+                "7778" +
+                "3336" +
+                "4445";
+        int result = 0;
+        String stringWithOnlyNumbers = filterFromCharacters(builder);
 
-        int result = getResult(mapWithRepeatNumbers, k);
+        if (!stringWithOnlyNumbers.isEmpty()) {
+            String[] strArray = stringWithOnlyNumbers.split("");
+            Arrays.sort(strArray, Comparator.comparingInt(Integer::parseInt));
+
+            String temporaryNumber;
+            int count;
+            for (int i = 0; i < strArray.length; i++) {
+                count = 1;
+                temporaryNumber = strArray[i];
+
+                while (i + 1 != strArray.length && Objects.equals(temporaryNumber, strArray[i + 1])) {
+                    count += 1;
+                    i++;
+                }
+
+                if (count <= k * PLAYERS) {
+                    result += 1;
+                }
+            }
+        }
 
         System.out.println(result);
     }
 
-    private static HashMap<Character, Integer> getMapWithRepeatNumbers(char[] charArray) {
-        HashMap<Character, Integer> map = new HashMap<>();
+    private static String filterFromCharacters(String str) {
+        char[] arr = str.toCharArray();
+        StringBuilder resultStr = new StringBuilder();
 
-        for (char c : charArray) {
-            if (Character.isDigit(c)) {
-                map.put(c, (map.getOrDefault(c, 0)) + 1);
+        for (int i = 0; i < arr.length; i++) {
+            if (Character.isDigit(arr[i])) {
+                resultStr.append(arr[i]);
             }
         }
 
-        return map;
+        return resultStr.toString();
     }
 
-    private static int getResult(HashMap<Character, Integer> mapWithRepeatNumbers, int k) {
-        int result = 0;
-
-        for (int t = 1; t <= ROUNDS; t++) {
-            char charValue = (char) (t + '0');
-            if (mapWithRepeatNumbers.get(charValue) != null && mapWithRepeatNumbers.get(charValue) <= k * PLAYERS) {
-                result += 1;
-            }
-        }
-
-        return result;
-    }
 }
