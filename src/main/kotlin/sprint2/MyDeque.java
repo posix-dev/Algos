@@ -31,13 +31,13 @@ import java.util.StringTokenizer;
  размер(size) нашего массива.
 
  -- ВРЕМЕННАЯ СЛОЖНОСТЬ --
- Добавление и извлечение по индексу происходит за О(1);
+Добавление и извлечение по индексу происходит за О(1);
+В общем случае n операций займут O(n) времени;
 
  -- ПРОСТРАНСТВЕННАЯ СЛОЖНОСТЬ --
  Алгоритм потребляет O(n) памяти массива в реализации CustomDeque.
  */
 
-// Код не проходит, но по логам все совпадает..
 // Id: 80331674
 // Link: https://contest.yandex.ru/contest/22781/run-report/80331674/
 
@@ -46,7 +46,6 @@ public class MyDeque {
     private static final String PUSH_BACK = "push_back";
     private static final String POP_FRONT = "pop_front";
     private static final String POP_BACK = "pop_back";
-
 
     public static void main(String[] args) throws IOException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
@@ -88,8 +87,6 @@ public class MyDeque {
 }
 
 class CustomDeque {
-
-    private CustomDeque() {}
 
     CustomDeque(int size) {
         this.queue = new int[size + 1];

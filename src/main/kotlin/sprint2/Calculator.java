@@ -22,6 +22,8 @@ import java.util.*;
  * <p>
  * -- ВРЕМЕННАЯ СЛОЖНОСТЬ --
  * Добавление в стэк О(1), извлечение сверху так же О(1);
+ * В общем случае длина операций/чисел n(входная строка) + операции над n/2 элементами
+ * O(n) + O(n/2) = O(3/2n) = O(n) времени;
  * <p>
  * -- ПРОСТРАНСТВЕННАЯ СЛОЖНОСТЬ --
  * Если массив содержит n элементов, то входной массив содержит n1 элементов,
@@ -35,22 +37,27 @@ import java.util.*;
 
 public class Calculator {
     public static void main(String[] args) throws IOException {
-        String[] arr;
         Stack<Integer> numbers = new Stack<>();
         int operand1, operand2;
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-            arr = reader.readLine().split(" ");
-        }
-
-        for (String value : arr) {
-            if (getPriority(value) == 0) {
-                numbers.push(Integer.valueOf(value));
-            } else {
-                operand2 = numbers.pop();
-                operand1 = numbers.pop();
-                numbers.push(calculate(operand1, operand2, value));
+            final var tokenizer = new StringTokenizer(reader.readLine());
+            
+            while (tokenizer.hasMoreTokens()) {
+                var value = tokenizer.nextToken();
+                // Проблем с этим не было, просто решил сделать так =) 
+                // изначально не правильно понял задачу, добавляя приоритетность
+                // потом понял, как верно решать, но оставил метод, просто чтобы
+                // вычислять числа и операции
+                if (getPriority(value) == 0) {
+                    numbers.push(Integer.valueOf(value));
+                } else {
+                    operand2 = numbers.pop();
+                    operand1 = numbers.pop();
+                    numbers.push(calculate(operand1, operand2, value));
+                }
             }
+
         }
 
         System.out.println(numbers.pop());
