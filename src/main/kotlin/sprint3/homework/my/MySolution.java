@@ -1,4 +1,4 @@
-package sprint3.homework;
+package sprint3.homework.my;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -6,6 +6,44 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * -- ПРИНЦИП РАБОТЫ --
+ * Реализовал эффективную quick sort без доп выделения на промежуточную память.
+ * <p>
+ * Я смотрел информацию по данной задаче по ресурсам:
+ * https://javarush.com/groups/posts/1939-comparator-v-java
+ * https://stackabuse.com/quicksort-in-java/
+ * <p>
+ * -- ДОКАЗАТЕЛЬСТВО КОРРЕКТНОСТИ --
+ * Реализация данного алгоритма базируется на quick sort сортировке.
+ * Для сравнения между эл-ми воспользовался известным интерфейсом Comparable c методом compareTo,
+ * где описал наши правила сортировки.
+ * В начале метода quickSort выбираю рандомно pivot(опорный эл-т) и по разные границы от него смотрю
+ * если эл-т с левой границы меньше опорного, то перемещаю границу правее у левой границы(left) пока не дойду
+ * до эл-та, который больше pivot или есть сам pivot.
+ * С правой границы смотрю, что если наш эл-т больше pivot(опорного) то сдвигаю правуб границу(right) левее, пока
+ * не дойду до pivot или эл-та, который больше right.
+ * В конце итерации меняю местами наши элементы на позициях left & right местами и сдвигаю left правее и right левее.
+ * Эти итерации продолжаются пока левая граница не дошла до правой или пересекла её.
+ * Метод quickSort будет вызываться рекурсивно пока startIndex не больше endIndex для двух частей массива.
+ * От start до right и left до end;
+ * <p>
+ * -- ВРЕМЕННАЯ СЛОЖНОСТЬ --
+ * Скорость сортировки, к сожалению, зависит от верно подобранного pivot(опорный эл-т);
+ * В среднем данная сортировка будет работать за O(N * logN) времени;
+ * В худшем случае сортировка будет работать за O(N^2) времени, если pivot будет указывать на последний или
+ * первые эл-т отсортированного массива(к примеру всегда pivot всегда < current эл-та) и мы пройдем весь массив;
+ * <p>
+ * -- ПРОСТРАНСТВЕННАЯ СЛОЖНОСТЬ --
+ * Если массив содержит n элементов, то алгоритм будет потреблять O(N) памяти.
+ * Если рассмотреть того, что есть стек вызовов в рекурсии, то в среднем получится
+ * O(N + logN) = O(N) памяти или в худшем O(2N) = O(N) памяти;
+ */
+
+// В пространственной сложности не совсем понял претензию, тк вроде всё описал.
+// Id: 81124631
+// Link: https://contest.yandex.ru/contest/23815/run-report/81124631/
+
 public class EffectiveQuickSort {
     public static void main(String[] args) throws IOException {
         int length;
@@ -89,9 +127,9 @@ class Intern implements Comparable<Intern> {
                 return this.name.compareTo(o.name);
             }
 
-            return this.bill - o.bill > 0 ? 1 : -1; // the more bill the worse it is
+            return -Integer.compare(o.bill, this.bill); // the more bill the worse it is
         }
 
-        return this.resolvedTasks - o.resolvedTasks > 0 ? -1 : 1;
+        return Integer.compare(o.resolvedTasks, this.resolvedTasks);
     }
 }
